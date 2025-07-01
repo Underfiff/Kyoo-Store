@@ -8,6 +8,7 @@ export default function AdminPage() {
           Edit Poster (Banner)
         </h2>
 
+        {/* Judul */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Judul Banner
@@ -19,6 +20,7 @@ export default function AdminPage() {
           />
         </div>
 
+        {/* Deskripsi */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Deskripsi
@@ -29,6 +31,26 @@ export default function AdminPage() {
           ></textarea>
         </div>
 
+        {/* Upload Gambar */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Upload Gambar Banner
+          </label>
+          <div className="flex items-center gap-4">
+            <input
+              type="file"
+              accept="image/*"
+              className="text-sm text-gray-500
+                           file:mr-4 file:py-2 file:px-4
+                           file:rounded file:border-0
+                           file:text-sm file:font-semibold
+                           file:bg-blue-50 file:text-blue-700
+                           hover:file:bg-blue-100"
+            />
+          </div>
+        </div>
+
+        {/* Tombol Simpan */}
         <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
           Simpan Perubahan
         </button>
