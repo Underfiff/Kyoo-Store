@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Product } from "@/types/product";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function EditProductForm({ product }: { product: Product }) {
   const router = useRouter();
@@ -121,12 +122,17 @@ export default function EditProductForm({ product }: { product: Product }) {
           onChange={handleImageChange}
           className="w-full"
         />
-        {preview && (
-          <img
-            src={preview}
-            alt="Preview"
-            className="mt-2 w-32 h-32 object-contain"
-          />
+        {typeof preview === "string" && (
+          <div className="mt-2 w-32 h-32 relative">
+            <Image
+              src={preview}
+              alt="Preview"
+              fill
+              className="object-contain rounded-md shadow"
+              sizes="128px"
+              priority={false}
+            />
+          </div>
         )}
       </div>
       <button

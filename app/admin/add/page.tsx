@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner"; // ✅ Tambahkan toast
+import Image from "next/image";
 
 export default function TambahProdukPage() {
   const router = useRouter();
@@ -121,11 +122,14 @@ export default function TambahProdukPage() {
               className="w-full"
             />
             {preview && (
-              <img
-                src={preview}
-                alt="Preview"
-                className="mt-2 w-32 h-32 object-contain"
-              />
+              <div className="mt-2 w-32 h-32 relative">
+                <Image
+                  src={preview}
+                  alt="Preview"
+                  fill
+                  className="object-contain rounded-md shadow"
+                />
+              </div>
             )}
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
