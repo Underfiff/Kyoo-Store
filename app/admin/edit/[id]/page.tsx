@@ -1,18 +1,22 @@
 import { Product } from "@/types/product";
 import { prisma } from "@/lib/prisma";
 import EditProductForm from "./EditProductForm";
+import { notFound } from "next/navigation";
 
-interface Props {
-  params: { id: string };
-}
+// Tipe props khusus untuk App Router
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
 
-export default async function EditProductPage({ params }: Props) {
+export default async function EditProductPage({ params }: PageProps) {
   const product = await prisma.product.findUnique({
     where: { id: params.id },
   });
 
   if (!product) {
-    return <div className="p-6 text-red-600">Produk tidak ditemukan.</div>;
+    return notFound(); // tampilkan halaman 404 jika produk tidak ditemukan
   }
 
   return (
