@@ -1,147 +1,192 @@
 "use client";
 
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import PosterCard from "./components/PosterCard";
-import FAQ from "./components/FAQ";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
-export default function LandingPage() {
-  const nomorWhatsApp = "6288286353470";
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
-  const posterData = [
-    {
-      src: "/Kyo Fb.png",
-      pesan: "Halo, saya tertarik dengan jasa Followers/Likes untuk Facebook.",
-    },
-    {
-      src: "/Kyo Ig.png",
-      pesan: "Halo, saya tertarik dengan jasa Followers/Likes untuk Instagram.",
-    },
-    {
-      src: "/Kyo Tt.png",
-      pesan:
-        "Halo, saya tertarik dengan jasa Followers/Likes/Views untuk Tiktok.",
-    },
-    {
-      src: "/Kyo Tl.png",
-      pesan:
-        "Halo, saya tertarik dengan jasa Subscribers/Reactions/Views untuk Telegram.",
-    },
-    {
-      src: "/Kyo Yt.png",
-      pesan:
-        "Halo, saya tertarik dengan jasa Subscribers/Likes/Views untuk Youtube.",
-    },
-    {
-      src: "/Kyo Sp.png",
-      pesan: "Halo, saya tertarik dengan jasa Followers untuk Shopee.",
-    },
-  ];
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.6 } },
+};
 
+export default function HomePage() {
   return (
-    <>
+    <main className="bg-white text-gray-900 font-sans">
+      {/* Header */}
+      <motion.header
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+        className="flex justify-between items-center px-6 py-4 border-b"
+      >
+        <div className="text-2xl font-bold">KyooPremium</div>
+        <div className="flex items-center gap-2">
+          <svg
+            className="w-5 h-5 text-gray-700"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6m-3-4a4 4 0 100-8 4 4 0 000 8zm6 4H6a2 2 0 01-2-2v-1a4 4 0 013-3.87"
+            ></path>
+          </svg>
+          <span>Contact</span>
+        </div>
+      </motion.header>
+
       {/* Hero Section */}
       <motion.section
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-center py-20 bg-gradient-to-b from-pink-600 to-[#121212] text-white"
-      >
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-          Tingkatkan Sosial Media & Akses Premium
-        </h1>
-        <p className="text-lg mt-4 font-light">
-          Followers, Likes, Views & Aplikasi Berbayar
-        </p>
-        <a
-          href={`https://wa.me/${nomorWhatsApp}`}
-          className="mt-6 inline-block bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-600 transition-all shadow-lg"
-        >
-          Chat via WhatsApp
-        </a>
-      </motion.section>
-
-      {/* Poster Grid */}
-      <main className="max-w-7xl mx-auto py-16 px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 bg-[#121212]">
-        {posterData.map((poster, index) => {
-          const pesanEncoded = encodeURIComponent(poster.pesan);
-          const linkUnik = `https://wa.me/${nomorWhatsApp}?text=${pesanEncoded}`;
-
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-            >
-              <PosterCard src={poster.src} link={linkUnik} />
-            </motion.div>
-          );
-        })}
-      </main>
-
-      {/* FAQ Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
-        className="bg-[#121212] text-white py-12 px-4"
+        className="flex flex-col lg:flex-row items-center justify-between px-6 lg:px-20 py-20"
       >
-        <div className="max-w-4xl mx-auto">
-          <FAQ />
+        <motion.div variants={fadeInUp} className="max-w-xl">
+          <h1 className="text-4xl font-bold mb-4">
+            Premium sat-set Anti Ribet
+          </h1>
+          <p className="text-lg text-gray-700 mb-6">
+            Kyoo Premium adalah sebuah website yang menyediakan aplikasi premium
+            dan jasa sosmed termurah dan terlengkap
+          </p>
+          <Button
+            asChild
+            className="bg-gray-900 text-white px-6 py-3 rounded shadow hover:bg-gray-800 transform hover:scale-105 transition duration-300"
+          >
+            <Link href="/products">Mulai Sekarang</Link>
+          </Button>
+        </motion.div>
+
+        <motion.div variants={fadeIn}>
+          <Image
+            src="/img/Premium Vector.jpeg"
+            alt="Shopping Illustration"
+            width={400}
+            height={400}
+            className="w-full max-w-md transition-transform duration-300 hover:scale-105"
+          />
+        </motion.div>
+      </motion.section>
+
+      {/* Feature Section */}
+      <motion.section
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="flex flex-col-reverse lg:flex-row items-center justify-between px-6 lg:px-20 py-20"
+      >
+        <motion.div variants={fadeIn} className="mt-10 lg:mt-0">
+          <Image
+            src="/img/download (32).jpeg"
+            alt="Feature Illustration"
+            width={400}
+            height={400}
+            className="w-full max-w-md transition-transform duration-300 hover:scale-105"
+          />
+        </motion.div>
+        <motion.div variants={fadeInUp} className="max-w-xl lg:ml-12">
+          <h2 className="text-3xl font-bold mb-4">
+            Produk Berkualitas, Harga Mantap dan Proses Cepat
+          </h2>
+          <p className="text-lg text-gray-700 mb-4">
+            Kami menyediakan berbagai macam produk berkualitas dengan harga
+            terjangkau. Kenapa kamu harus membeli produk kami?
+          </p>
+          <ul className="list-disc pl-5 space-y-2 text-gray-800">
+            <li>Premium</li>
+            <li>Bergaransi</li>
+            <li>Proses Cepat</li>
+            <li>Fast Response</li>
+          </ul>
+        </motion.div>
+      </motion.section>
+
+      {/* Payment Methods */}
+      <motion.section
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="px-6 lg:px-20 py-20 text-center"
+      >
+        <h2 className="text-3xl font-bold mb-4">Metode Pembayaran</h2>
+        <p className="text-gray-700 mb-10">
+          Kami menyediakan bermacam metode pembayaran yang bisa kamu pilih
+          sesuai keinginanmu.
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+          {[
+            "qris.png",
+            "dana.png",
+            "GoPay Logo.jpeg",
+            "ovo.jpg",
+            "shope.jpeg",
+            "BNI.webp",
+          ].map((img, idx) => (
+            <Card
+              key={idx}
+              className="p-6 w-full flex items-center justify-center shadow-sm hover:shadow-md transition transform hover:scale-105"
+            >
+              <CardContent className="flex items-center justify-center">
+                <Image
+                  src={`/img/${img}`}
+                  alt={img}
+                  width={100}
+                  height={40}
+                  className="h-10 object-contain"
+                />
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </motion.section>
 
-      {/* Floating WhatsApp Button */}
-      <a
-        href={`https://wa.me/${nomorWhatsApp}`}
-        target="_blank"
-        className="fixed bottom-5 right-5 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-full shadow-lg z-50 transition"
-      >
-        Chat WA
-      </a>
       {/* Footer */}
-      <footer className="bg-[#1a1a1a] text-gray-300 py-10 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-6 text-center md:text-left">
-          {/* Info Kiri */}
-          <div>
-            <h3 className="text-xl font-bold text-white mb-2">Tentang Kami</h3>
-            <p className="text-sm text-gray-400">
-              Kami menyediakan jasa peningkatan sosial media dan akses aplikasi
-              premium dengan layanan cepat & terpercaya.
-            </p>
-          </div>
-
-          {/* Navigasi */}
-          <div>
-            <h3 className="text-xl font-bold text-white mb-2">Layanan</h3>
-            <ul className="space-y-1 text-sm">
-              <li>Followers & Likes</li>
-              <li>Akun Premium (Netflix, Spotify, dsb)</li>
-              <li>Custom Request via WhatsApp</li>
-            </ul>
-          </div>
-
-          {/* Kontak */}
-          <div>
-            <h3 className="text-xl font-bold text-white mb-2">Kontak</h3>
-            <p className="text-sm">
-              WhatsApp:{" "}
-              <a
-                href={`https://wa.me/${nomorWhatsApp}`}
-                className="text-green-400 hover:underline"
-              >
-                {nomorWhatsApp}
-              </a>
-            </p>
+      <motion.footer
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="bg-white py-20"
+      >
+        <div
+          className="max-w-6xl mx-auto px-6 pb-10 relative rounded-xl overflow-hidden"
+          style={{
+            backgroundImage: "url('/img/download (36).jpeg')",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-0 bg-white opacity-50 z-0"></div>
+          <div className="relative z-10 text-center py-10 px-4">
+            <h3 className="text-sm text-gray-700 font-medium">KYOOPREMIUM</h3>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 my-2">
+              Langganan Premium Gak Harus Mahal
+            </h2>
+            <Button
+              asChild
+              className="bg-gray-900 text-white px-6 py-3 rounded shadow hover:bg-gray-800 transform hover:scale-105 transition duration-300"
+            >
+              <Link href="/products">Mulai Sekarang</Link>
+            </Button>
           </div>
         </div>
-
-        {/* Copyright */}
-        <div className="mt-10 text-center text-sm text-gray-500 border-t border-gray-700 pt-4">
-          &copy; {new Date().getFullYear()} KyoStore. All rights reserved.
-        </div>
-      </footer>
-    </>
+      </motion.footer>
+    </main>
   );
 }
