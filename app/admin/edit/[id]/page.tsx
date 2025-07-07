@@ -1,23 +1,22 @@
+// app/admin/edit/[id]/page.tsx
+
 import { Product } from "@/types/product";
 import { prisma } from "@/lib/prisma";
 import EditProductForm from "./EditProductForm";
 import { notFound } from "next/navigation";
 
-// Tipe props khusus untuk App Router
-type PageProps = {
+interface EditPageProps {
   params: {
     id: string;
   };
-};
+}
 
-export default async function EditProductPage({ params }: PageProps) {
+export default async function EditProductPage({ params }: EditPageProps) {
   const product = await prisma.product.findUnique({
     where: { id: params.id },
   });
 
-  if (!product) {
-    return notFound(); // tampilkan halaman 404 jika produk tidak ditemukan
-  }
+  if (!product) return notFound();
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
