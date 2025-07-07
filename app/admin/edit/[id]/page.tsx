@@ -1,19 +1,12 @@
-// app/admin/edit/[id]/page.tsx
-
-import { Product } from "@/types/product";
 import { prisma } from "@/lib/prisma";
+import { Product } from "@/types/product";
 import EditProductForm from "./EditProductForm";
 import { notFound } from "next/navigation";
 
-interface EditPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default async function EditProductPage({ params }: EditPageProps) {
+// Fungsi utama async
+async function EditProductPage({ id }: { id: string }) {
   const product = await prisma.product.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!product) return notFound();
@@ -26,4 +19,9 @@ export default async function EditProductPage({ params }: EditPageProps) {
       </div>
     </div>
   );
+}
+
+// Export default wrapper (tidak async!)
+export default function PageWrapper({ params }: { params: { id: string } }) {
+  return <EditProductPage id={params.id} />;
 }
