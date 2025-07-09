@@ -2,15 +2,36 @@
 
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import { Product } from "@/types/product";
-import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/footer";
+import CheckoutModal from "@/components/CheckoutModal"; // 🆕 Pastikan komponen ini tersedia
+import { Button } from "@/components/ui/button";
+
+
+
+type Variant = {
+  id: string;
+  label: string;
+  price: number;
+};
+
+type Product = {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  imageUrl?: string;
+  status: string;
+  description?: string;
+  variants: Variant[];
+};
 
 export default function ProductPage() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null); // 🆕
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -18,18 +39,13 @@ export default function ProductPage() {
     const fetchProducts = async () => {
       try {
         const res = await fetch("/api/products", { cache: "no-store" });
-
-        if (!res.ok) {
-          throw new Error(`Failed to fetch: ${res.status}`);
-        }
-
+        if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
         const data = await res.json();
-        setProducts(data);
+        setProducts(Array.isArray(data.products) ? data.products : []);
       } catch (err) {
         console.error("❌ Gagal ambil produk:", err);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -53,9 +69,7 @@ export default function ProductPage() {
   );
 
   const categories = [
-    "ANOTHER APPS",
     "EDITING APPS",
-    "GAMES APPS",
     "JASA SOSMED",
     "MUSIC APPS",
     "STREAMING APPS",
@@ -63,32 +77,8 @@ export default function ProductPage() {
   ];
 
   return (
-    <div className="bg-gray-50 text-gray-900 font-sans">
-      <header className="flex justify-between items-center px-6 py-4 bg-white shadow fade-in-up">
-        <Link
-          href="/"
-          className="text-2xl font-bold hover:opacity-80 transition"
-        >
-          KyooPremium
-        </Link>
-
-        <div className="flex items-center gap-2">
-          <svg
-            className="w-5 h-5 text-gray-700"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6m-3-4a4 4 0 100-8 4 4 0 000 8zm6 4H6a2 2 0 01-2-2v-1a4 4 0 013-3.87"
-            />
-          </svg>
-          <span>Contact</span>
-        </div>
-      </header>
+    <div className="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col">
+      <Header />
 
       <section className="px-6 pt-6 fade-in-up relative z-20">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 relative z-30">
@@ -146,20 +136,31 @@ export default function ProductPage() {
         </div>
       </section>
 
-      <section className="px-6 py-6 fade-in-up z-10 relative">
+      <section className="px-6 py-6 fade-in-up z-10 relative flex-1">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {filtered.map((product) => (
             <ProductCard
               key={product.id}
               name={product.name}
-              price={product.price}
+              price={product.variants?.[0]?.price ?? product.price}
               category={product.category}
               img={product.imageUrl!}
               status={product.status === "TERSEDIA" ? "tersedia" : "habis"}
+              onClick={() => setSelectedProduct(product)}
             />
           ))}
         </div>
       </section>
+
+      <Footer />
+
+      {/* 🆕 Checkout Modal */}
+      {selectedProduct && (
+        <CheckoutModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
 
       <style jsx global>{`
         @keyframes fadeInUp {
@@ -187,6 +188,7 @@ type ProductCardProps = {
   category: string;
   img: string;
   status: "tersedia" | "habis";
+  onClick?: () => void;
 };
 
 function ProductCard({
@@ -196,11 +198,13 @@ function ProductCard({
   category,
   img,
   status,
+  onClick,
 }: ProductCardProps) {
   return (
     <div
-      className={`bg-white rounded-xl shadow p-4 flex flex-col transform transition duration-300 hover:scale-105 fade-in-up ${
-        status === "habis" ? "opacity-60 grayscale" : ""
+      onClick={onClick}
+      className={`cursor-pointer bg-white rounded-xl shadow p-4 flex flex-col transform transition duration-300 hover:scale-105 fade-in-up ${
+        status === "habis" ? "opacity-60 grayscale pointer-events-none" : ""
       }`}
     >
       <Image

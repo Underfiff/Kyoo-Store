@@ -1,3 +1,7 @@
+// app/api/products/[id]/status/route.ts
+
+export const runtime = "nodejs";
+
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 

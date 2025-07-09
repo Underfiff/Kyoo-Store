@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import Footer from "@/components/footer";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -42,7 +43,9 @@ export default function HomePage() {
               d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6m-3-4a4 4 0 100-8 4 4 0 000 8zm6 4H6a2 2 0 01-2-2v-1a4 4 0 013-3.87"
             ></path>
           </svg>
-          <span>Contact</span>
+          <Link href="/contact" className="hover:opacity-80 transition">
+            Contact
+          </Link>
         </div>
       </motion.header>
 
@@ -187,6 +190,7 @@ export default function HomePage() {
           </div>
         </div>
       </motion.footer>
+      <Footer />
     </main>
   );
 }

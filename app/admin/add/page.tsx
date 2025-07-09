@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { toast } from "sonner"; // ✅ Tambahkan toast
+import { toast } from "sonner";
 import Image from "next/image";
 
 export default function TambahProdukPage() {
@@ -15,12 +15,34 @@ export default function TambahProdukPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // ⬇️ State baru untuk variants
+  const [variants, setVariants] = useState([{ label: "", price: "" }]);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
       setPreview(URL.createObjectURL(file));
     }
+  };
+
+  const handleVariantChange = (
+    index: number,
+    field: "label" | "price",
+    value: string
+  ) => {
+    const newVariants = [...variants];
+    newVariants[index][field] = value;
+    setVariants(newVariants);
+  };
+
+  const addVariant = () => {
+    setVariants([...variants, { label: "", price: "" }]);
+  };
+
+  const removeVariant = (index: number) => {
+    const newVariants = variants.filter((_, i) => i !== index);
+    setVariants(newVariants);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,6 +75,13 @@ export default function TambahProdukPage() {
         imageUrl = result.secure_url;
       }
 
+      const cleanVariants = variants
+        .filter((v) => v.label && v.price)
+        .map((v) => ({
+          label: v.label,
+          price: Number(v.price),
+        }));
+
       const res = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -62,6 +91,7 @@ export default function TambahProdukPage() {
           price: formData.get("price"),
           description: formData.get("description"),
           imageUrl,
+          variants: cleanVariants,
         }),
       });
 
@@ -71,7 +101,7 @@ export default function TambahProdukPage() {
       } else {
         toast.error("Gagal menambahkan produk");
       }
-    } catch  {
+    } catch {
       toast.error("Terjadi kesalahan saat menambahkan produk");
     }
 
@@ -98,10 +128,11 @@ export default function TambahProdukPage() {
               <option value="MUSIC">Music Apps</option>
               <option value="JASA SOSMED">Jasa Sosmed</option>
               <option value="EDITING APPS">Editing Apps</option>
+              <option value="VPN">VPN</option>
             </select>
           </div>
           <div>
-            <Label htmlFor="price">Harga (Rp)</Label>
+            <Label htmlFor="price">Harga Default (Rp)</Label>
             <Input type="number" name="price" id="price" required />
           </div>
           <div>
@@ -132,6 +163,50 @@ export default function TambahProdukPage() {
               </div>
             )}
           </div>
+
+          {/* ⬇️ Varian Produk */}
+          <div>
+            <Label className="block mb-2">Varian Produk</Label>
+            {variants.map((variant, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <Input
+                  placeholder="Label"
+                  value={variant.label}
+                  onChange={(e) =>
+                    handleVariantChange(index, "label", e.target.value)
+                  }
+                  className="w-1/2"
+                />
+                <Input
+                  type="number"
+                  placeholder="Harga"
+                  value={variant.price}
+                  onChange={(e) =>
+                    handleVariantChange(index, "price", e.target.value)
+                  }
+                  className="w-1/2"
+                />
+                {variants.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeVariant(index)}
+                    className="text-red-600 font-bold px-2"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={addVariant}
+              className="mt-1 text-sm"
+              variant="outline"
+            >
+              + Tambah Varian
+            </Button>
+          </div>
+
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Menyimpan..." : "Tambah Produk"}
           </Button>

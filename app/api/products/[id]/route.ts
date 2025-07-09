@@ -1,41 +1,88 @@
+// app/api/products/[id]/route.ts
+
+export const runtime = "nodejs";
+
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+import { NextRequest, NextResponse } from "next/server";
+
+// GET /api/products/:id
+export async function GET(
+  req: NextRequest,
+  context: Promise<{ params: { id: string } }>
 ) {
-  try {
-    const data = await req.json();
+  const { params } = await context;
+  const id = params.id;
 
-    const updated = await prisma.product.update({
-      where: { id: params.id },
-      data: {
-        name: data.name,
-        category: data.category,
-        price: Number(data.price),
-        description: data.description,
-        imageUrl: data.imageUrl,
-        status: data.status ?? "TERSEDIA",
-      },
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: { variants: true },
     });
 
-    return NextResponse.json(updated);
-  } catch (err) {
-    // ⛑️ Gunakan safe check & logging yang bersih
-    if (
-      err instanceof Prisma.PrismaClientKnownRequestError &&
-      err.code === "P2025"
-    ) {
+    if (!product) {
       return NextResponse.json(
         { message: "Produk tidak ditemukan" },
         { status: 404 }
       );
     }
 
-    console.error("❌ Update error:", err instanceof Error ? err.message : err);
+    return NextResponse.json(product, {
+      status: 200,
+    });
+  } catch (error) {
+    console.error("❌ Error GET /products/:id", error);
+    return NextResponse.json(
+      { message: "Gagal mengambil produk" },
+      { status: 500 }
+    );
+  }
+}
 
+// PUT /api/products/:id
+// app/api/products/[id]/route.ts
+
+export async function PUT(
+  req: NextRequest,
+  context: Promise<{ params: { id: string } }>
+) {
+  const { params } = await context;
+  const id = params.id;
+
+  try {
+    const data = await req.json();
+
+    // Update produk utama
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
+        name: data.name,
+        category: data.category,
+        price: Number(data.price),
+        description: data.description,
+        imageUrl: data.imageUrl,
+        status: data.status ?? "tersedia",
+      },
+    });
+
+    // Jika ada field `variants` dari client
+    if (Array.isArray(data.variants)) {
+      // Hapus semua varian lama
+      await prisma.variant.deleteMany({ where: { productId: id } });
+
+      // Tambahkan varian baru
+      await prisma.variant.createMany({
+        data: data.variants.map((v: { label: string; price: number }) => ({
+          label: v.label,
+          price: v.price,
+          productId: id,
+        })),
+      });
+    }
+
+    return NextResponse.json(updatedProduct);
+  } catch (error) {
+    console.error("❌ Error PUT /products/:id", error);
     return NextResponse.json(
       { message: "Gagal update produk" },
       { status: 500 }
@@ -43,18 +90,27 @@ export async function PUT(
   }
 }
 
+
+// DELETE /api/products/:id
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: Promise<{ params: { id: string } }>
 ) {
+  const { params } = await context;
+  const id = params.id;
+
   try {
+    await prisma.variant.deleteMany({
+      where: { productId: id },
+    });
+
     await prisma.product.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Produk berhasil dihapus" });
   } catch (error) {
-    console.error("❌ Error hapus produk:", error);
+    console.error("❌ Error DELETE /products/:id", error);
     return NextResponse.json(
       { message: "Gagal menghapus produk" },
       { status: 500 }
