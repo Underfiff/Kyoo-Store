@@ -49,7 +49,7 @@ export default function CheckoutModal({ product, onClose }: Props) {
 
     const subtotal = selectedVariant ? selectedVariant.price * quantity : 0;
 
-  const adminNumber = "6288286353470";
+  const adminNumber = "6285841825827";
 
   const handleBuy = () => {
     if (!receiver) {
@@ -65,7 +65,7 @@ export default function CheckoutModal({ product, onClose }: Props) {
         : product.price.toLocaleString("id-ID")
     } masih tersedia?\n\n*Info:*\n- *Jumlah Item:* ${quantity}\n- *Metode Pembayaran:* ${selectedPayment.toUpperCase()}\n- *Total Harga:* Rp ${subtotal.toLocaleString(
       "id-ID"
-    )}\n- *Email:* ${receiver}\n\nMohon konfirmasi untuk ketersediaan produk, agar saya bisa melakukan pembayaran secepatnya. Terima kasih banyak!\nJika ada informasi tambahan yang dibutuhkan, silakan beri tahu saya.`;
+    )}\n- *Dengan Nomor :* ${receiver}\n\nMohon konfirmasi untuk ketersediaan produk, agar saya bisa melakukan pembayaran secepatnya. Terima kasih banyak!\nJika ada informasi tambahan yang dibutuhkan, silakan beri tahu saya.`;
       
 
     const waLink = `https://wa.me/${adminNumber}?text=${encodeURIComponent(
@@ -237,10 +237,10 @@ export default function CheckoutModal({ product, onClose }: Props) {
             <AlertDialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50" />
             <AlertDialog.Content className="fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-full max-w-sm">
               <AlertDialog.Title className="text-lg font-semibold mb-2">
-                Nomor/email belum diisi
+                Nomor handphone belum diisi
               </AlertDialog.Title>
               <AlertDialog.Description className="text-sm text-gray-600 mb-4">
-                Mohon isi email atau nomor handphone penerima sebelum
+                Mohon isi nomor handphone penerima sebelum
                 melanjutkan pembelian.
               </AlertDialog.Description>
               <div className="flex justify-end">
