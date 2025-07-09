@@ -214,9 +214,7 @@ function ProductCard({
         height={160}
         className="w-full h-40 object-contain mb-2"
       />
-      <span className="text-xs bg-gray-200 px-2 py-1 rounded mb-1">
-        PROSES INSTANT
-      </span>
+     
       <h3 className="text-sm font-semibold uppercase text-gray-600">
         {category}
       </h3>
