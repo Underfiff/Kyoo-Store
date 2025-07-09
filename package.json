@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "clean": "rimraf .next .turbo node_modules/.cache",
-    "clean-build": "npm run clean && npm run build"
+    "clean-build": "npm run clean && npm run build",
+    "build": "prisma generate && next build"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
