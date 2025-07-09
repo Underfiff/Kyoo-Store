@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "Toko Sosmed & Premium App | KyoStore",
   description:
     "Jual followers, likes, views, dan akses premium aplikasi dengan harga terjangkau!",
+  icons: {
+    icon: "/favicon.ico", // atau .png / .svg
+  },
   keywords: [
     "followers",
     "jasa sosmed",
@@ -32,11 +35,12 @@ export const metadata: Metadata = {
     title: "Toko Sosmed & Premium App | KyoStore",
     description:
       "Solusi lengkap untuk kebutuhan sosial media & aplikasi premium Anda.",
+
     type: "website",
-    url: "https://kyostore.vercel.app", // ganti dengan domain kamu
+    url: "https://kyooo.my.id/", // ganti dengan domain kamu
     images: [
       {
-        url: "/og-banner.png",
+        url: "",
         width: 1200,
         height: 630,
         alt: "KyoStore Banner",
