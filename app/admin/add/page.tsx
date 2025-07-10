@@ -125,10 +125,11 @@ export default function TambahProdukPage() {
               className="w-full border rounded px-3 py-2"
             >
               <option value="STREAMING APPS">Streaming Apps</option>
-              <option value="MUSIC">Music Apps</option>
+              <option value="MUSIC APPS">Music Apps</option>
               <option value="JASA SOSMED">Jasa Sosmed</option>
               <option value="EDITING APPS">Editing Apps</option>
               <option value="VPN">VPN</option>
+              <option value="AI">AI</option>
             </select>
           </div>
           <div>

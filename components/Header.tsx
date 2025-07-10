@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header className="flex justify-between items-center px-6 py-4 bg-white shadow fade-in-up">
       <Link href="/" className="text-2xl font-bold hover:opacity-80 transition">
-        KyooPremium
+        KyooStore
       </Link>
 
       <div className="flex items-center gap-2">

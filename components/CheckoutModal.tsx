@@ -31,15 +31,17 @@ type Props = {
 const paymentMethods = [
   { id: "qris", name: "QRIS", logo: "/img/qris.png" },
   { id: "gopay", name: "GoPay", logo: "/img/GoPay Logo.jpeg" },
+  { id: "dana", name: "Dana", logo: "/img/dana.png" },
   { id: "bri", name: "BRI", logo: "/img/BRI_2020.svg.png" },
   { id: "shopeepay", name: "ShopeePay", logo: "/img/shope.jpeg" },
+  { id: "seabank", name: "SeaBank", logo: "/img/SeaBank.svg.png" },
 ];
 
 export default function CheckoutModal({ product, onClose }: Props) {
-    const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
-      product.variants?.[0] ?? null
-    );
-      
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
+    product.variants?.[0] ?? null
+  );
+
   const [quantity, setQuantity] = useState(1);
   const [selectedPayment, setSelectedPayment] = useState("qris");
   const [receiver, setReceiver] = useState("");
@@ -47,7 +49,7 @@ export default function CheckoutModal({ product, onClose }: Props) {
   const [showMissingReceiverAlert, setShowMissingReceiverAlert] =
     useState(false);
 
-    const subtotal = selectedVariant ? selectedVariant.price * quantity : 0;
+  const subtotal = selectedVariant ? selectedVariant.price * quantity : 0;
 
   const adminNumber = "6285841825827";
 
@@ -66,7 +68,6 @@ export default function CheckoutModal({ product, onClose }: Props) {
     } masih tersedia?\n\n*Info:*\n- *Jumlah Item:* ${quantity}\n- *Metode Pembayaran:* ${selectedPayment.toUpperCase()}\n- *Total Harga:* Rp ${subtotal.toLocaleString(
       "id-ID"
     )}\n- *Dengan Nomor :* ${receiver}\n\nMohon konfirmasi untuk ketersediaan produk, agar saya bisa melakukan pembayaran secepatnya. Terima kasih banyak!\nJika ada informasi tambahan yang dibutuhkan, silakan beri tahu saya.`;
-      
 
     const waLink = `https://wa.me/${adminNumber}?text=${encodeURIComponent(
       message
@@ -108,7 +109,15 @@ export default function CheckoutModal({ product, onClose }: Props) {
 
           {showDesc && product.description && (
             <div className="text-sm border p-3 rounded mb-4 whitespace-pre-line">
-              {product.description}
+              {/* Make sure to replace URLs with anchor tags */}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: product.description.replace(
+                    /(https?:\/\/[^\s]+)/g,
+                    '<a href="$1" target="_blank" class="text-blue-500 underline">$1</a>'
+                  ),
+                }}
+              />
             </div>
           )}
 
@@ -229,6 +238,7 @@ export default function CheckoutModal({ product, onClose }: Props) {
           </div>
         </motion.div>
 
+        {/* Missing receiver alert dialog */}
         <AlertDialog.Root
           open={showMissingReceiverAlert}
           onOpenChange={setShowMissingReceiverAlert}
@@ -240,8 +250,8 @@ export default function CheckoutModal({ product, onClose }: Props) {
                 Nomor handphone belum diisi
               </AlertDialog.Title>
               <AlertDialog.Description className="text-sm text-gray-600 mb-4">
-                Mohon isi nomor handphone penerima sebelum
-                melanjutkan pembelian.
+                Mohon isi nomor handphone penerima sebelum melanjutkan
+                pembelian.
               </AlertDialog.Description>
               <div className="flex justify-end">
                 <AlertDialog.Action asChild>

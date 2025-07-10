@@ -28,7 +28,7 @@ export default function HomePage() {
         animate="visible"
         className="flex justify-between items-center px-6 py-4 border-b"
       >
-        <div className="text-2xl font-bold">KyooPremium</div>
+        <div className="text-2xl font-bold">KyooStore</div>
         <div className="flex items-center gap-2">
           <svg
             className="w-5 h-5 text-gray-700"
@@ -62,7 +62,7 @@ export default function HomePage() {
             Premium sat-set Anti Ribet
           </h1>
           <p className="text-lg text-gray-700 mb-6">
-            Kyoo Premium adalah sebuah website yang menyediakan aplikasi premium
+            Kyoo Store adalah sebuah website yang menyediakan aplikasi premium
             dan jasa sosmed termurah dan terlengkap
           </p>
           <Button
@@ -136,9 +136,9 @@ export default function HomePage() {
             "qris.png",
             "dana.png",
             "GoPay Logo.jpeg",
-            "ovo.jpg",
             "shope.jpeg",
-            "BNI.webp",
+            "SeaBank.svg.png",
+            "BRI_2020.svg.png"
           ].map((img, idx) => (
             <Card
               key={idx}
@@ -177,7 +177,7 @@ export default function HomePage() {
         >
           <div className="absolute inset-0 bg-white opacity-50 z-0"></div>
           <div className="relative z-10 text-center py-10 px-4">
-            <h3 className="text-sm text-gray-700 font-medium">KYOOPREMIUM</h3>
+            <h3 className="text-sm text-gray-700 font-medium">KYOOSTORE</h3>
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 my-2">
               Langganan Premium Gak Harus Mahal
             </h2>

@@ -8,8 +8,6 @@ import Footer from "@/components/footer";
 import CheckoutModal from "@/components/CheckoutModal"; // 🆕 Pastikan komponen ini tersedia
 import { Button } from "@/components/ui/button";
 
-
-
 type Variant = {
   id: string;
   label: string;
@@ -34,6 +32,7 @@ export default function ProductPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null); // 🆕
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,6 +43,8 @@ export default function ProductPage() {
         setProducts(Array.isArray(data.products) ? data.products : []);
       } catch (err) {
         console.error("❌ Gagal ambil produk:", err);
+      } finally {
+        setLoading(false); // Set loading to false once data is fetched
       }
     };
     fetchProducts();
@@ -74,6 +75,7 @@ export default function ProductPage() {
     "MUSIC APPS",
     "STREAMING APPS",
     "VPN",
+    "AI"
   ];
 
   return (
@@ -138,17 +140,25 @@ export default function ProductPage() {
 
       <section className="px-6 py-6 fade-in-up z-10 relative flex-1">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {filtered.map((product) => (
-            <ProductCard
-              key={product.id}
-              name={product.name}
-              price={product.variants?.[0]?.price ?? product.price}
-              category={product.category}
-              img={product.imageUrl!}
-              status={product.status === "TERSEDIA" ? "tersedia" : "habis"}
-              onClick={() => setSelectedProduct(product)}
-            />
-          ))}
+          {/* Display skeleton loader while loading */}
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="skeleton-card bg-gray-200 w-full h-[250px] rounded-xl shadow-md"
+                ></div>
+              ))
+            : filtered.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  name={product.name}
+                  price={product.variants?.[0]?.price ?? product.price}
+                  category={product.category}
+                  img={product.imageUrl!}
+                  status={product.status === "TERSEDIA" ? "tersedia" : "habis"}
+                  onClick={() => setSelectedProduct(product)}
+                />
+              ))}
         </div>
       </section>
 
@@ -175,6 +185,26 @@ export default function ProductPage() {
         }
         .fade-in-up {
           animation: fadeInUp 0.7s ease-out both;
+        }
+
+        /* Skeleton style */
+        .skeleton-card {
+          background-color: #f3f4f6;
+          border-radius: 12px;
+          height: 200px;
+          animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+          0% {
+            opacity: 0.7;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0.7;
+          }
         }
       `}</style>
     </div>
