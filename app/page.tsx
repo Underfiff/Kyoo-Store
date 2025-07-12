@@ -69,7 +69,9 @@ export default function HomePage() {
             asChild
             className="bg-gray-900 text-white px-6 py-3 rounded shadow hover:bg-gray-800 transform hover:scale-105 transition duration-300"
           >
-            <Link href="/products">Mulai Sekarang</Link>
+            <Link href="/products" prefetch={true}>
+              Mulai Sekarang
+            </Link>
           </Button>
         </motion.div>
 
@@ -138,7 +140,7 @@ export default function HomePage() {
             "GoPay Logo.jpeg",
             "shope.jpeg",
             "SeaBank.svg.png",
-            "BRI_2020.svg.png"
+            "BRI_2020.svg.png",
           ].map((img, idx) => (
             <Card
               key={idx}
@@ -185,7 +187,9 @@ export default function HomePage() {
               asChild
               className="bg-gray-900 text-white px-6 py-3 rounded shadow hover:bg-gray-800 transform hover:scale-105 transition duration-300"
             >
-              <Link href="/products">Mulai Sekarang</Link>
+              <Link href="/products" prefetch={true}>
+                Mulai Sekarang
+              </Link>
             </Button>
           </div>
         </div>
