@@ -77,17 +77,19 @@ export default function CheckoutModal({ product, onClose }: Props) {
 
   return (
     <AnimatePresence>
+      {/* BACKDROP */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
         className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4"
       >
+        {/* MODAL CARD */}
         <motion.div
-          initial={{ scale: 0.95 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0.95 }}
+          initial={{ y: 40, opacity: 0, scale: 0.95 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: 40, opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.25 }}
           className="bg-white w-full max-w-md rounded-xl shadow-xl p-5 relative max-h-[90vh] overflow-y-auto"
         >
