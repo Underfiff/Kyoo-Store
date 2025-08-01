@@ -290,3 +290,4 @@ function ProductCard({
     </div>
   );
 }
+

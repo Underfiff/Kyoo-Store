@@ -17,31 +17,31 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const category = searchParams.get("category");
 
-    const skip = (page - 1) * limit;
+    const isAllCategory = !category || category.toLowerCase() === "semua";
 
-    const whereClause = category ? { category } : {};
+    const whereClause = isAllCategory ? {} : { category };
+    const skip = (page - 1) * limit;
 
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where: whereClause,
         orderBy: { createdAt: "desc" },
         include: { variants: true },
-        skip,
-        take: limit,
+        ...(isAllCategory ? {} : { skip, take: limit }),
       }),
       prisma.product.count({
         where: whereClause,
       }),
     ]);
 
-    const totalPages = Math.ceil(total / limit);
+    const totalPages = isAllCategory ? 1 : Math.ceil(total / limit);
 
     logTime("Query complete");
 
     return NextResponse.json(
       {
         products,
-        page,
+        page: isAllCategory ? 1 : page,
         totalPages,
         total,
       },
@@ -61,6 +61,7 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
 
 export async function POST(req: NextRequest) {
   try {
