@@ -3,7 +3,7 @@ export const runtime = "nodejs";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const start = Date.now();
   const logTime = (label: string) =>
     console.log(`⏱️ ${label}: ${Date.now() - start}ms`);
@@ -11,17 +11,40 @@ export async function GET() {
   try {
     logTime("Start");
 
-    const products = await prisma.product.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        variants: true,
-      },
-    });
+    const { searchParams } = new URL(req.url);
 
-    logTime("FindMany query");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const category = searchParams.get("category");
+
+    const skip = (page - 1) * limit;
+
+    const whereClause = category ? { category } : {};
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where: whereClause,
+        orderBy: { createdAt: "desc" },
+        include: { variants: true },
+        skip,
+        take: limit,
+      }),
+      prisma.product.count({
+        where: whereClause,
+      }),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    logTime("Query complete");
 
     return NextResponse.json(
-      { products },
+      {
+        products,
+        page,
+        totalPages,
+        total,
+      },
       {
         status: 200,
         headers: {

@@ -27,7 +27,6 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { CustomAlertDialog } from "@/components/ui/AlertDialog";
 
-
 interface Product {
   id: string;
   name: string;
@@ -43,14 +42,21 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const router = useRouter();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("SEMUA");
+  const [categories, setCategories] = useState<string[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/products?page=${page}&limit=10`);
+        const res = await fetch(
+          `/api/products?page=${page}&limit=10&category=${
+            selectedCategory !== "SEMUA" ? selectedCategory : ""
+          }`
+        );
         const data = await res.json();
         setProducts(Array.isArray(data.products) ? data.products : []);
         setTotalPages(data.totalPages || 1);
@@ -62,7 +68,25 @@ export default function AdminDashboard() {
     };
 
     fetchProducts();
-  }, [page]);
+  }, [page, selectedCategory]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/products"); // kamu bisa ganti ke /api/categories jika tersedia
+        const data = await res.json();
+       const allCategories = (data.products?.map((p: Product) => p.category) ||
+         []) as string[];
+       const unique = Array.from(new Set(allCategories));
+
+        setCategories(["SEMUA", ...unique]);
+      } catch (err) {
+        console.error("Gagal mengambil kategori:", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const confirmDelete = async () => {
     if (!pendingDeleteId) return;
@@ -70,7 +94,7 @@ export default function AdminDashboard() {
       await fetch(`/api/products/${pendingDeleteId}`, { method: "DELETE" });
       setProducts(products.filter((p) => p.id !== pendingDeleteId));
       toast.success("Produk berhasil dihapus");
-      setPendingDeleteId(null); // reset
+      setPendingDeleteId(null);
     } catch (err) {
       console.error("Gagal hapus produk:", err);
       toast.error("Gagal menghapus produk");
@@ -105,7 +129,7 @@ export default function AdminDashboard() {
     <>
       <div className="p-6 space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Admin Panel - KyooPremium</h1>
+          <h1 className="text-2xl font-bold">Admin Panel - KyooStore</h1>
           <Button
             variant="destructive"
             onClick={() => signOut({ callbackUrl: "/admin/login" })}
@@ -120,6 +144,24 @@ export default function AdminDashboard() {
             <Link href="/admin/add">
               <Button variant="default">+ Tambah Produk</Button>
             </Link>
+          </div>
+
+          <div className="flex items-center gap-4 mb-4">
+            <label className="text-sm font-medium">Filter Kategori:</label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+                setPage(1);
+              }}
+              className="border px-3 py-2 rounded-md text-sm"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
           <Table>

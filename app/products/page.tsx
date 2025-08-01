@@ -233,36 +233,53 @@ function ProductCard({
   return (
     <div
       onClick={onClick}
-      className={`cursor-pointer bg-white rounded-xl shadow p-4 flex flex-col transform transition duration-300 hover:scale-105 fade-in-up ${
+      className={`cursor-pointer bg-white rounded-2xl shadow-md p-4 flex flex-col transition duration-300 hover:scale-105 ${
         status === "habis" ? "opacity-60 grayscale pointer-events-none" : ""
       }`}
     >
-      <Image
-        src={img}
-        alt={name}
-        width={300}
-        height={160}
-        className="w-full h-40 object-contain mb-2"
-      />
-     
-      <h3 className="text-sm font-semibold uppercase text-gray-600">
+      {/* Gambar */}
+      <div className="bg-gray-100 rounded-lg flex items-center justify-center h-36 w-full mb-4 overflow-hidden">
+        <Image
+          src={img}
+          alt={name}
+          width={120}
+          height={120}
+          className="object-contain max-h-full max-w-full"
+        />
+      </div>
+
+      {/* Kategori */}
+      <h3 className="text-xs font-semibold uppercase text-gray-500 tracking-wide mb-1">
         {category}
       </h3>
-      <p className="font-bold text-black">{name}</p>
-      {originalPrice ? (
-        <>
-          <p className="line-through text-red-500 text-sm">
-            Rp {originalPrice.toLocaleString("id-ID")}
-          </p>
+
+      {/* Nama Produk */}
+      <p className="text-sm font-bold text-black mb-3 leading-tight min-h-[40px]">
+        {name}
+      </p>
+
+      {/* Harga */}
+      <div className="py-2">
+        {originalPrice ? (
+          <>
+            <p className="line-through text-red-500 text-sm">
+              Rp {originalPrice.toLocaleString("id-ID")}
+            </p>
+            <p className="text-blue-600 font-semibold">
+              Rp {price.toLocaleString("id-ID")}
+            </p>
+          </>
+        ) : (
           <p className="text-blue-600 font-semibold">
             Rp {price.toLocaleString("id-ID")}
           </p>
-        </>
-      ) : (
-        <p className="text-blue-600 font-semibold">
-          Rp {price.toLocaleString("id-ID")}
-        </p>
-      )}
+        )}
+      </div>
+
+      {/* Garis */}
+      <hr className="my-3 border-gray-200" />
+
+      {/* Status */}
       <span
         className={`text-xs mt-auto ${
           status === "tersedia" ? "text-green-600" : "text-red-600"

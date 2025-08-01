@@ -31,7 +31,7 @@ type Props = {
 const paymentMethods = [
   { id: "qris", name: "QRIS", logo: "/img/qris.png" },
   { id: "gopay", name: "GoPay", logo: "/img/GoPay Logo.jpeg" },
-  { id: "dana", name: "Dana", logo: "/img/dana.png" },
+  // { id: "dana", name: "Dana", logo: "/img/dana.png" },
   { id: "bri", name: "BRI", logo: "/img/BRI_2020.svg.png" },
   { id: "shopeepay", name: "ShopeePay", logo: "/img/shope.jpeg" },
   { id: "seabank", name: "SeaBank", logo: "/img/SeaBank.svg.png" },

@@ -136,7 +136,7 @@ export default function HomePage() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
           {[
             "qris.png",
-            "dana.png",
+            // "dana.png",
             "GoPay Logo.jpeg",
             "shope.jpeg",
             "SeaBank.svg.png",
