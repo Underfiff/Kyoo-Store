@@ -67,7 +67,7 @@ export default function CheckoutModal({ product, onClose }: Props) {
         : product.price.toLocaleString("id-ID")
     } masih tersedia?\n\n*Info:*\n- *Jumlah Item:* ${quantity}\n- *Metode Pembayaran:* ${selectedPayment.toUpperCase()}\n- *Total Harga:* Rp ${subtotal.toLocaleString(
       "id-ID"
-    )}\n- *Dengan Nomor :* ${receiver}\n\nMohon konfirmasi untuk ketersediaan produk, agar saya bisa melakukan pembayaran secepatnya. Terima kasih banyak!\nJika ada informasi tambahan yang dibutuhkan, silakan beri tahu saya.`;
+    )}\n- *Dengan Nomor :* ${receiver}\n\nMohon konfirmasi untuk ketersediaan produk, agar saya bisa melakukan pembayaran secepatnya. Terima kasih banyak!`;
 
     const waLink = `https://wa.me/${adminNumber}?text=${encodeURIComponent(
       message
